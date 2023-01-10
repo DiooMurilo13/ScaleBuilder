@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Escala {
+  id        Int      @id @unique @default(autoincrement())
+  nomeEscala String  
+  descricao String
+  usuario Usuario[]
+  escalaHistorico EscalaHistorico[] 
+  dataInicio DateTime
+  diaSemana DiaSemana[]
+}
+
+model EscalaHistorico{
+  id Int @id @unique @default(autoincrement())
+  descricao String
+  escala Escala @relation(fields: [escalaId], references: [id])
+  escalaId Int
+}
+
+model Usuario{
+  id Int @id @default(autoincrement())
+  nome String
+  email String @unique
+  senha String
+  escala Escala[] 
+}
+
+model DiaSemana{
+  id Int @id @default(autoincrement())
+  descricao String
+  escala Escala[] 
+}
